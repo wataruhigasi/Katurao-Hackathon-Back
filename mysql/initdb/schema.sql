@@ -13,7 +13,7 @@ CREATE TABLE `threads` (
   `position` json NOT NULL,
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`)
-)
+);
 
 CREATE TABLE `comments` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
@@ -23,4 +23,4 @@ CREATE TABLE `comments` (
   `created_at` datetime NOT NULL,
   PRIMARY KEY (`id`),
   INDEX `article_id_index` (`article_id`)
-)
+);
