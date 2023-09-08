@@ -1,7 +1,7 @@
 package usecase
 
 import (
-	"github.com/wataruhigasi/Katurao-Hackathon-Back/article/infra"
+	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/infra"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
 )
 

@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/wataruhigasi/Katurao-Hackathon-Back/article/usecase"
+	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/usecase"
 )
 
 type ArticleHandler interface {

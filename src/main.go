@@ -6,9 +6,9 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/wataruhigasi/Katurao-Hackathon-Back/article/handler"
-	"github.com/wataruhigasi/Katurao-Hackathon-Back/article/infra"
-	"github.com/wataruhigasi/Katurao-Hackathon-Back/article/usecase"
+	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/handler"
+	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/infra"
+	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/usecase"
 )
 
 func main() {
