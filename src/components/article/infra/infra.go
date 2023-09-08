@@ -33,7 +33,7 @@ func (ar *articleRepositoryImpl) FindAll() ([]*model.Article, error) {
 		return nil, err
 	}
 
-	as := make([]*model.Article, len(dto))
+	as := make([]*model.Article, 0, len(dto))
 	for _, v := range dto {
 		a, err := ToArticle(v)
 		if err != nil {
