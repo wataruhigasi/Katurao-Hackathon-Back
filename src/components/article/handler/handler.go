@@ -26,7 +26,8 @@ func NewArticleHandler(ar infra.ArticleRepository) *articleHandlerImpl {
 func (ah *articleHandlerImpl) GetAll(c echo.Context) error {
 	articles, err := ah.ar.FindAll()
 	if err != nil {
-		return err
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 	return c.JSON(http.StatusOK, articles)
 }
@@ -34,11 +35,14 @@ func (ah *articleHandlerImpl) GetAll(c echo.Context) error {
 func (ah *articleHandlerImpl) Create(c echo.Context) error {
 	a := new(model.Article)
 	if err := c.Bind(a); err != nil {
-		return err
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
 	if err := ah.ar.Create(a); err != nil {
-		return err
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
+
 	return c.NoContent(http.StatusOK)
 }
