@@ -4,12 +4,15 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/volatiletech/sqlboiler/v4/boil"
+	"github.com/volatiletech/sqlboiler/v4/types"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/models"
 )
 
 type ArticleRepository interface {
-	FindArticles() ([]*model.Article, error)
+	FindAll() ([]*model.Article, error)
+	Create(*model.Article) error
 }
 
 type articleRepositoryImpl struct {
@@ -22,7 +25,7 @@ func NewArticleRepository(conn *sql.DB) *articleRepositoryImpl {
 	}
 }
 
-func (ar *articleRepositoryImpl) FindArticles() ([]*model.Article, error) {
+func (ar *articleRepositoryImpl) FindAll() ([]*model.Article, error) {
 	ctx := context.Background()
 
 	dto, err := models.Articles().All(ctx, ar.conn)
@@ -55,4 +58,23 @@ func ToArticle(a *models.Article) (*model.Article, error) {
 		Body:      a.Body,
 		Position:  p,
 	}, nil
+}
+
+func (ar *articleRepositoryImpl) Create(a *model.Article) error {
+	ctx := context.Background()
+
+	json := &types.JSON{}
+	if err := json.Marshal(a.Position); err != nil {
+		return err
+	}
+
+	// INSERT INTO articles (title, created_at, body, position) VALUES (?, ?, ?, ?)
+	dto := models.Article{
+		ID:       int64(a.ID),
+		Title:    a.Title,
+		Body:     a.Body,
+		Position: *json,
+	}
+
+	return dto.Insert(ctx, ar.conn, boil.Infer())
 }

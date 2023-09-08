@@ -4,37 +4,40 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/usecase"
+	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/infra"
+	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
 )
 
 type ArticleHandler interface {
-	GetArticles() echo.HandlerFunc
+	GetAll() echo.HandlerFunc
+	Create(c echo.Context) error
 }
 
 type articleHandlerImpl struct {
-	au usecase.ArticleUsecase
+	ar infra.ArticleRepository
 }
 
-func NewArticleHandler(au usecase.ArticleUsecase) *articleHandlerImpl {
+func NewArticleHandler(ar infra.ArticleRepository) *articleHandlerImpl {
 	return &articleHandlerImpl{
-		au: au,
+		ar: ar,
 	}
 }
 
-func (ah *articleHandlerImpl) GetArticles() echo.HandlerFunc {
-	return func(c echo.Context) error {
-		articles, err := ah.au.GetArticles()
-		if err != nil {
-			return err
-		}
-		return c.JSON(http.StatusOK, articles)
+func (ah *articleHandlerImpl) GetAll(c echo.Context) error {
+	articles, err := ah.ar.FindAll()
+	if err != nil {
+		return err
 	}
+	return c.JSON(http.StatusOK, articles)
 }
 
-var _ echo.HandlerFunc = CreateArticle
+func (ah *articleHandlerImpl) Create(c echo.Context) error {
+	a := new(model.Article)
+	if err := c.Bind(a); err != nil {
+		return err
+	}
 
-func CreateArticle(c echo.Context) error {
-	if err := usecase.CreateArticle(); err != nil {
+	if err := ah.ar.Create(a); err != nil {
 		return err
 	}
 	return c.NoContent(http.StatusOK)
