@@ -6,7 +6,7 @@ type Thread struct {
 	ID        int       `json:"id"`
 	Title     string    `json:"title"`
 	CreatedAt time.Time `json:"created_at"`
-	Position  Position  `json:"coordinate"`
+	Position  Position  `json:"position"`
 	Comments  []*Comment  `json:"comments"`
 }
 

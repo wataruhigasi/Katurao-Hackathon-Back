@@ -7,7 +7,7 @@ type Article struct {
 	Title     string    `json:"title"`
 	CreatedAt time.Time `json:"created_at"`
 	Body      string    `json:"body"`
-	Position  Position  `json:"coordinate"`
+	Position  Position  `json:"position"`
 }
 
 func NewArticle(id int, title string, createdAt time.Time, body string, position Position) *Article {
