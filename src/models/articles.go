@@ -186,8 +186,8 @@ type articleL struct{}
 
 var (
 	articleAllColumns            = []string{"id", "title", "body", "position", "created_at"}
-	articleColumnsWithoutDefault = []string{"title", "body", "position", "created_at"}
-	articleColumnsWithDefault    = []string{"id"}
+	articleColumnsWithoutDefault = []string{"title", "body", "position"}
+	articleColumnsWithDefault    = []string{"id", "created_at"}
 	articlePrimaryKeyColumns     = []string{"id"}
 	articleGeneratedColumns      = []string{}
 )

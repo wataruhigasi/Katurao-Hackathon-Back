@@ -24,7 +24,7 @@ import (
 // Comment is an object representing the database table.
 type Comment struct {
 	ID        int64     `boil:"id" json:"id" toml:"id" yaml:"id"`
-	ArticleID int64     `boil:"article_id" json:"article_id" toml:"article_id" yaml:"article_id"`
+	ThreadID  int64     `boil:"thread_id" json:"thread_id" toml:"thread_id" yaml:"thread_id"`
 	Body      string    `boil:"body" json:"body" toml:"body" yaml:"body"`
 	Author    string    `boil:"author" json:"author" toml:"author" yaml:"author"`
 	CreatedAt time.Time `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
@@ -35,13 +35,13 @@ type Comment struct {
 
 var CommentColumns = struct {
 	ID        string
-	ArticleID string
+	ThreadID  string
 	Body      string
 	Author    string
 	CreatedAt string
 }{
 	ID:        "id",
-	ArticleID: "article_id",
+	ThreadID:  "thread_id",
 	Body:      "body",
 	Author:    "author",
 	CreatedAt: "created_at",
@@ -49,13 +49,13 @@ var CommentColumns = struct {
 
 var CommentTableColumns = struct {
 	ID        string
-	ArticleID string
+	ThreadID  string
 	Body      string
 	Author    string
 	CreatedAt string
 }{
 	ID:        "comments.id",
-	ArticleID: "comments.article_id",
+	ThreadID:  "comments.thread_id",
 	Body:      "comments.body",
 	Author:    "comments.author",
 	CreatedAt: "comments.created_at",
@@ -65,13 +65,13 @@ var CommentTableColumns = struct {
 
 var CommentWhere = struct {
 	ID        whereHelperint64
-	ArticleID whereHelperint64
+	ThreadID  whereHelperint64
 	Body      whereHelperstring
 	Author    whereHelperstring
 	CreatedAt whereHelpertime_Time
 }{
 	ID:        whereHelperint64{field: "`comments`.`id`"},
-	ArticleID: whereHelperint64{field: "`comments`.`article_id`"},
+	ThreadID:  whereHelperint64{field: "`comments`.`thread_id`"},
 	Body:      whereHelperstring{field: "`comments`.`body`"},
 	Author:    whereHelperstring{field: "`comments`.`author`"},
 	CreatedAt: whereHelpertime_Time{field: "`comments`.`created_at`"},
@@ -94,9 +94,9 @@ func (*commentR) NewStruct() *commentR {
 type commentL struct{}
 
 var (
-	commentAllColumns            = []string{"id", "article_id", "body", "author", "created_at"}
-	commentColumnsWithoutDefault = []string{"article_id", "body", "author", "created_at"}
-	commentColumnsWithDefault    = []string{"id"}
+	commentAllColumns            = []string{"id", "thread_id", "body", "author", "created_at"}
+	commentColumnsWithoutDefault = []string{"thread_id", "body", "author"}
+	commentColumnsWithDefault    = []string{"id", "created_at"}
 	commentPrimaryKeyColumns     = []string{"id"}
 	commentGeneratedColumns      = []string{}
 )

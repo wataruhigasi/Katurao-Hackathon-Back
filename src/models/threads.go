@@ -89,8 +89,8 @@ type threadL struct{}
 
 var (
 	threadAllColumns            = []string{"id", "title", "position", "created_at"}
-	threadColumnsWithoutDefault = []string{"title", "position", "created_at"}
-	threadColumnsWithDefault    = []string{"id"}
+	threadColumnsWithoutDefault = []string{"title", "position"}
+	threadColumnsWithDefault    = []string{"id", "created_at"}
 	threadPrimaryKeyColumns     = []string{"id"}
 	threadGeneratedColumns      = []string{}
 )
