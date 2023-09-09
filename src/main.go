@@ -12,6 +12,8 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/handler"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/infra"
+	handlerc "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/handler"
+	infrac "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/infra"
 )
 
 func main() {
@@ -23,11 +25,17 @@ func main() {
 	ar := infra.NewArticleRepository(conn)
 	ah := handler.NewArticleHandler(ar)
 
+	cr := infrac.NewCommentRepository(conn)
+	ch := handlerc.NewCommentHandler(cr)
+
 	e := echo.New()
 
 	e.GET("/", hello)
 	e.GET("/articles", ah.GetAll)
 	e.POST("/article", ah.Create)
+
+	e.GET("/thread/:thread_id/comments", ch.GetAll)
+	e.POST("/thread/:thread_id/comment", ch.Create)
 
 	log.Fatal(e.Start(":8080"))
 }
