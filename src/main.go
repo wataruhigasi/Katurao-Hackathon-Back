@@ -10,6 +10,7 @@ import (
 
 	"github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
+	"github.com/labstack/echo/v4/middleware"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/handler"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/infra"
 	handlerc "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/handler"
@@ -29,6 +30,7 @@ func main() {
 	ch := handlerc.NewCommentHandler(cr)
 
 	e := echo.New()
+	e.Use(middleware.CORS())
 
 	e.GET("/", hello)
 	e.GET("/articles", ah.GetAll)
