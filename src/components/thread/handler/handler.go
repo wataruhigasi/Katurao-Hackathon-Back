@@ -2,10 +2,8 @@ package handler
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/labstack/echo/v4"
-	infrac "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/infra"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/infra"
 
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
@@ -18,13 +16,11 @@ type ThreadHandler interface {
 
 type threadHandlerImpl struct {
 	tr infra.ThreadRepository
-	cr infrac.CommentRepository
 }
 
-func NewThreadHandler(tr infra.ThreadRepository, cr infrac.CommentRepository) *threadHandlerImpl {
+func NewThreadHandler(tr infra.ThreadRepository) *threadHandlerImpl {
 	return &threadHandlerImpl{
 		tr: tr,
-		cr: cr,
 	}
 }
 
@@ -45,38 +41,22 @@ func (th *threadHandlerImpl) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	// ここから
+	res, err := th.tr.Create(t)
 
-	if err := th.tr.Create(t); err != nil {
-		c.Logger().Error(err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err)
-	}
-
-	comment := new(model.Comment)
-	if err := c.Bind(comment); err != nil {
-		c.Logger().Error(err)
-		return echo.NewHTTPError(http.StatusBadRequest, err)
-	}
-
-	id, err := th.tr.GetLastInsertID()
-	if err != nil {
-		c.Logger().Error(err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err)
-	}
-
-	// ここまで
-
-	// id を int に変換
-	idInt, err := strconv.Atoi(strconv.FormatInt(id, 10))
-	if err != nil {
-		c.Logger().Error(err)
-		return echo.NewHTTPError(http.StatusInternalServerError, err)
-	}
-
-	if err := th.cr.Create(comment, idInt); err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	return c.NoContent(http.StatusOK)
 }
+
+// comment := new(model.Comment)
+// if err := c.Bind(comment); err != nil {
+// 	c.Logger().Error(err)
+// 	return echo.NewHTTPError(http.StatusBadRequest, err)
+// }
+
+// if err := th.cr.Create(comment, idInt); err != nil {
+// 	c.Logger().Error(err)
+// 	return echo.NewHTTPError(http.StatusInternalServerError, err)
+// }

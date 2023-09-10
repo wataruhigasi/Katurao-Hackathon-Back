@@ -32,7 +32,7 @@ func main() {
 	ch := handlerc.NewCommentHandler(cr)
 
 	tr := infrat.NewThreadRepository(conn)
-	th := handlert.NewThreadHandler(tr, cr)
+	th := handlert.NewThreadHandler(tr)
 
 	e := echo.New()
 
