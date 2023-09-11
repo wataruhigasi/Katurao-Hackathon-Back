@@ -12,7 +12,7 @@ import (
 
 type CommentRepository interface {
 	FindAll(int) ([]*model.Comment, error)
-	Create(*model.Comment, int) error
+	Create(*model.Comment, int64) error
 }
 
 type commentRepositoryImpl struct {
@@ -56,14 +56,14 @@ func ToComment(c *models.Comment) (*model.Comment, error) {
 	}, nil
 }
 
-func (cr *commentRepositoryImpl) Create(c *model.Comment, id int) error {
+func (cr *commentRepositoryImpl) Create(c *model.Comment, threadID int64) error {
 	ctx := context.Background()
 
 	dto := models.Comment{
 		ID:       int64(c.ID),
 		Body:     c.Body,
 		Author:   c.Author,
-		ThreadID: int64(id),
+		ThreadID: threadID,
 	}
 
 	return dto.Insert(ctx, cr.conn, boil.Infer())
