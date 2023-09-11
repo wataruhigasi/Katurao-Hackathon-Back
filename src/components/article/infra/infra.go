@@ -10,22 +10,22 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/models"
 )
 
-type ArticleRepo interface {
+type Repo interface {
 	FindAll() ([]*model.Article, error)
 	Create(*model.Article) error
 }
 
-type articleRepoImpl struct {
+type repoImpl struct {
 	conn *sql.DB
 }
 
-func NewRepo(conn *sql.DB) *articleRepoImpl {
-	return &articleRepoImpl{
+func NewRepo(conn *sql.DB) *repoImpl {
+	return &repoImpl{
 		conn: conn,
 	}
 }
 
-func (ar *articleRepoImpl) FindAll() ([]*model.Article, error) {
+func (ar *repoImpl) FindAll() ([]*model.Article, error) {
 	ctx := context.Background()
 
 	dto, err := models.Articles().All(ctx, ar.conn)
@@ -35,7 +35,7 @@ func (ar *articleRepoImpl) FindAll() ([]*model.Article, error) {
 
 	as := make([]*model.Article, 0, len(dto))
 	for _, v := range dto {
-		a, err := ToArticle(v)
+		a, err := toArticle(v)
 		if err != nil {
 			return nil, err
 		}
@@ -45,7 +45,7 @@ func (ar *articleRepoImpl) FindAll() ([]*model.Article, error) {
 	return as, nil
 }
 
-func ToArticle(a *models.Article) (*model.Article, error) {
+func toArticle(a *models.Article) (*model.Article, error) {
 	var p model.Position
 	if err := a.Position.Unmarshal(&p); err != nil {
 		return nil, err
@@ -60,7 +60,7 @@ func ToArticle(a *models.Article) (*model.Article, error) {
 	}, nil
 }
 
-func (ar *articleRepoImpl) Create(a *model.Article) error {
+func (ar *repoImpl) Create(a *model.Article) error {
 	ctx := context.Background()
 
 	json := &types.JSON{}

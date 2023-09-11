@@ -8,22 +8,22 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
 )
 
-type ArticleHandler interface {
+type Handler interface {
 	GetAll() echo.HandlerFunc
 	Create(c echo.Context) error
 }
 
-type articleHandlerImpl struct {
-	ar infra.ArticleRepo
+type handlerImpl struct {
+	ar infra.Repo
 }
 
-func New(ar infra.ArticleRepo) *articleHandlerImpl {
-	return &articleHandlerImpl{
+func New(ar infra.Repo) *handlerImpl {
+	return &handlerImpl{
 		ar: ar,
 	}
 }
 
-func (ah *articleHandlerImpl) GetAll(c echo.Context) error {
+func (ah *handlerImpl) GetAll(c echo.Context) error {
 	articles, err := ah.ar.FindAll()
 	if err != nil {
 		c.Logger().Error(err)
@@ -32,7 +32,7 @@ func (ah *articleHandlerImpl) GetAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, articles)
 }
 
-func (ah *articleHandlerImpl) Create(c echo.Context) error {
+func (ah *handlerImpl) Create(c echo.Context) error {
 	a := new(model.Article)
 	if err := c.Bind(a); err != nil {
 		c.Logger().Error(err)
