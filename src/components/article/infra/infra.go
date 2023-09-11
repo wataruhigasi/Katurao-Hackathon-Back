@@ -10,22 +10,22 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/models"
 )
 
-type ArticleRepository interface {
+type ArticleRepo interface {
 	FindAll() ([]*model.Article, error)
 	Create(*model.Article) error
 }
 
-type articleRepositoryImpl struct {
+type articleRepoImpl struct {
 	conn *sql.DB
 }
 
-func NewRepo(conn *sql.DB) *articleRepositoryImpl {
-	return &articleRepositoryImpl{
+func NewRepo(conn *sql.DB) *articleRepoImpl {
+	return &articleRepoImpl{
 		conn: conn,
 	}
 }
 
-func (ar *articleRepositoryImpl) FindAll() ([]*model.Article, error) {
+func (ar *articleRepoImpl) FindAll() ([]*model.Article, error) {
 	ctx := context.Background()
 
 	dto, err := models.Articles().All(ctx, ar.conn)
@@ -60,7 +60,7 @@ func ToArticle(a *models.Article) (*model.Article, error) {
 	}, nil
 }
 
-func (ar *articleRepositoryImpl) Create(a *model.Article) error {
+func (ar *articleRepoImpl) Create(a *model.Article) error {
 	ctx := context.Background()
 
 	json := &types.JSON{}

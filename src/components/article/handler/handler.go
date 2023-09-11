@@ -14,10 +14,10 @@ type ArticleHandler interface {
 }
 
 type articleHandlerImpl struct {
-	ar infra.ArticleRepository
+	ar infra.ArticleRepo
 }
 
-func New(ar infra.ArticleRepository) *articleHandlerImpl {
+func New(ar infra.ArticleRepo) *articleHandlerImpl {
 	return &articleHandlerImpl{
 		ar: ar,
 	}

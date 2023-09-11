@@ -15,10 +15,10 @@ type CommentHandler interface {
 }
 
 type commentHandlerImpl struct {
-	cr infra.CommentRepository
+	cr infra.CommentRepo
 }
 
-func New(cr infra.CommentRepository) *commentHandlerImpl {
+func New(cr infra.CommentRepo) *commentHandlerImpl {
 	return &commentHandlerImpl{
 		cr: cr,
 	}
