@@ -26,10 +26,10 @@ func NewRepo(conn *sql.DB) *repoImpl {
 	}
 }
 
-func (cr *repoImpl) FindAll(id int) ([]*model.Comment, error) {
+func (r *repoImpl) FindAll(id int) ([]*model.Comment, error) {
 	ctx := context.Background()
 
-	dto, err := models.Comments(qm.Where("thread_id = ?", id)).All(ctx, cr.conn)
+	dto, err := models.Comments(qm.Where("thread_id = ?", id)).All(ctx, r.conn)
 
 	if err != nil {
 		return nil, err
@@ -57,7 +57,7 @@ func toComment(c *models.Comment) (*model.Comment, error) {
 	}, nil
 }
 
-func (cr *repoImpl) Create(c *model.Comment, threadID int64) error {
+func (r *repoImpl) Create(c *model.Comment, threadID int64) error {
 	ctx := context.Background()
 
 	dto := models.Comment{
@@ -67,10 +67,10 @@ func (cr *repoImpl) Create(c *model.Comment, threadID int64) error {
 		ThreadID: threadID,
 	}
 
-	return dto.Insert(ctx, cr.conn, boil.Infer())
+	return dto.Insert(ctx, r.conn, boil.Infer())
 }
 
-func (cr *repoImpl) CreateTx(tx *sql.Tx, c *model.Comment, threadID int64) error {
+func (r *repoImpl) CreateTx(tx *sql.Tx, c *model.Comment, threadID int64) error {
 	ctx := context.Background()
 
 	dto := models.Comment{
