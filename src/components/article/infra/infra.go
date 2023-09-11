@@ -19,7 +19,7 @@ type articleRepositoryImpl struct {
 	conn *sql.DB
 }
 
-func NewArticleRepository(conn *sql.DB) *articleRepositoryImpl {
+func NewRepo(conn *sql.DB) *articleRepositoryImpl {
 	return &articleRepositoryImpl{
 		conn: conn,
 	}
