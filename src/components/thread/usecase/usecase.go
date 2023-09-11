@@ -3,7 +3,7 @@ package usecase
 import (
 	"database/sql"
 
-	infrac "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/infra"
+	comment_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/infra"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/infra"
 	transaction_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/transaction/infra"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
@@ -15,26 +15,26 @@ type Usecase interface {
 }
 
 type usecaseImpl struct {
-	tr  infra.Repo
-	cr  infrac.Repo
+	r  infra.Repo
+	cr  comment_infra.Repo
 	txr transaction_infra.Repo
 }
 
-func New(tr infra.Repo, cr infrac.Repo) *usecaseImpl {
+func New(r infra.Repo, cr comment_infra.Repo) *usecaseImpl {
 	return &usecaseImpl{
-		tr: tr,
+		r: r,
 		cr: cr,
 	}
 }
 
-func (tu *usecaseImpl) FindAll() ([]*model.Thread, error) {
-	return tu.tr.FindAll()
+func (u *usecaseImpl) FindAll() ([]*model.Thread, error) {
+	return u.r.FindAll()
 }
 
-func (tu *usecaseImpl) Create(t *model.Thread, c *model.Comment) error {
-	err := tu.txr.Transaction(
+func (u *usecaseImpl) Create(t *model.Thread, c *model.Comment) error {
+	err := u.txr.Transaction(
 		func(tx *sql.Tx) error {
-			res, err := tu.tr.CreateTx(tx, t)
+			res, err := u.r.CreateTx(tx, t)
 			if err != nil {
 				return err
 			}
@@ -44,7 +44,7 @@ func (tu *usecaseImpl) Create(t *model.Thread, c *model.Comment) error {
 				return err
 			}
 
-			if err := tu.cr.CreateTx(tx, c, threadID); err != nil {
+			if err := u.cr.CreateTx(tx, c, threadID); err != nil {
 				return err
 			}
 

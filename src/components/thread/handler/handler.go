@@ -15,17 +15,17 @@ type Handler interface {
 }
 
 type handlerImpl struct {
-	tu usecase.Usecase
+	u usecase.Usecase
 }
 
-func New(tu usecase.Usecase) *handlerImpl {
+func New(u usecase.Usecase) *handlerImpl {
 	return &handlerImpl{
-		tu: tu,
+		u: u,
 	}
 }
 
-func (th *handlerImpl) GetAll(c echo.Context) error {
-	threads, err := th.tu.FindAll()
+func (h *handlerImpl) GetAll(c echo.Context) error {
+	threads, err := h.u.FindAll()
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
@@ -39,7 +39,7 @@ type createReq struct {
 	Author string `json:"author"`
 }
 
-func (th *handlerImpl) Create(c echo.Context) error {
+func (h *handlerImpl) Create(c echo.Context) error {
 	req := new(createReq)
 	if err := c.Bind(req); err != nil {
 		c.Logger().Error(err)
@@ -55,7 +55,7 @@ func (th *handlerImpl) Create(c echo.Context) error {
 		Author: req.Author,
 	}
 
-	if err := th.tu.Create(t, com); err != nil {
+	if err := h.u.Create(t, com); err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
