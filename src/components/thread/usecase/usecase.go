@@ -7,6 +7,7 @@ import (
 )
 
 type ThreadUsecase interface {
+	FindAll() ([]*model.Thread, error)
 	Create(t *model.Thread, c *model.Comment) error
 }
 
@@ -19,6 +20,10 @@ func NewThreadUsecase(tr infra.ThreadRepository) *threadUsecaseImpl {
 	return &threadUsecaseImpl{
 		tr: tr,
 	}
+}
+
+func (tu *threadUsecaseImpl) FindAll() ([]*model.Thread, error) {
+	return tu.tr.FindAll()
 }
 
 func (tu *threadUsecaseImpl) Create(t *model.Thread, c *model.Comment) error {
