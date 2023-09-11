@@ -12,7 +12,6 @@ import (
 type ThreadRepository interface {
 	FindAll() ([]*model.Thread, error)
 	Create(*model.Thread) (sql.Result, error)
-	GetLastInsertID() (int64, error)
 }
 
 type threadRepositoryImpl struct {
@@ -23,17 +22,6 @@ func NewThreadRepository(conn *sql.DB) *threadRepositoryImpl {
 	return &threadRepositoryImpl{
 		conn: conn,
 	}
-}
-
-func (tr *threadRepositoryImpl) GetLastInsertID() (int64, error) {
-	ctx := context.Background()
-
-	dto, err := models.Threads().All(ctx, tr.conn)
-	if err != nil {
-		return 0, err
-	}
-
-	return dto[len(dto)-1].ID, nil
 }
 
 func (tr *threadRepositoryImpl) FindAll() ([]*model.Thread, error) {

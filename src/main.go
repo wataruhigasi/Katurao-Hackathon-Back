@@ -33,7 +33,7 @@ func main() {
 	ch := handlerc.NewCommentHandler(cr)
 
 	tr := infrat.NewThreadRepository(conn)
-	tu := usecase.NewThreadUsecase(tr)
+	tu := usecase.NewThreadUsecase(tr, cr)
 	th := handlert.NewThreadHandler(tu)
 
 	e := echo.New()
