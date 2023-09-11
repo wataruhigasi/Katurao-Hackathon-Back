@@ -34,9 +34,10 @@ func (h *handlerImpl) GetAll(c echo.Context) error {
 }
 
 type createReq struct {
-	Title  string `json:"title"`
-	Body   string `json:"body"`
-	Author string `json:"author"`
+	Title    string         `json:"title"`
+	Body     string         `json:"body"`
+	Author   string         `json:"author"`
+	Position model.Position `json:"position"`
 }
 
 func (h *handlerImpl) Create(c echo.Context) error {
@@ -47,7 +48,8 @@ func (h *handlerImpl) Create(c echo.Context) error {
 	}
 
 	t := &model.Thread{
-		Title: req.Title,
+		Title:    req.Title,
+		Position: req.Position,
 	}
 
 	com := &model.Comment{

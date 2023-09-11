@@ -19,6 +19,7 @@ import (
 	thread_handler "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/handler"
 	thread_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/infra"
 	thread_usecase "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/usecase"
+	transaction_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/transaction/infra"
 )
 
 func main() {
@@ -34,7 +35,8 @@ func main() {
 	ch := comment_handler.New(cr)
 
 	tr := thread_infra.NewRepo(conn)
-	tu := thread_usecase.New(tr, cr)
+	txr := transaction_infra.NewRepo(conn)
+	tu := thread_usecase.New(tr, cr, txr)
 	th := thread_handler.New(tu)
 
 	e := echo.New()

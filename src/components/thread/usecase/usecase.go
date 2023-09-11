@@ -20,10 +20,11 @@ type usecaseImpl struct {
 	txr transaction_infra.Repo
 }
 
-func New(r infra.Repo, cr comment_infra.Repo) *usecaseImpl {
+func New(r infra.Repo, cr comment_infra.Repo, txr transaction_infra.Repo) *usecaseImpl {
 	return &usecaseImpl{
 		r: r,
 		cr: cr,
+		txr: txr,
 	}
 }
 
