@@ -18,7 +18,7 @@ type threadHandlerImpl struct {
 	tu usecase.ThreadUsecase
 }
 
-func NewThreadHandler(tu usecase.ThreadUsecase) *threadHandlerImpl {
+func New(tu usecase.ThreadUsecase) *threadHandlerImpl {
 	return &threadHandlerImpl{
 		tu: tu,
 	}
@@ -34,9 +34,10 @@ func (th *threadHandlerImpl) GetAll(c echo.Context) error {
 }
 
 type createReq struct {
-	Title  string `json:"title"`
-	Body   string `json:"body"`
-	Author string `json:"author"`
+	Title    string         `json:"title"`
+	Body     string         `json:"body"`
+	Author   string         `json:"author"`
+	Position model.Position `json:"position"`
 }
 
 func (th *threadHandlerImpl) Create(c echo.Context) error {
@@ -47,7 +48,8 @@ func (th *threadHandlerImpl) Create(c echo.Context) error {
 	}
 
 	t := &model.Thread{
-		Title: req.Title,
+		Title:    req.Title,
+		Position: req.Position,
 	}
 
 	com := &model.Comment{

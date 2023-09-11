@@ -17,7 +17,7 @@ type articleHandlerImpl struct {
 	ar infra.ArticleRepository
 }
 
-func NewArticleHandler(ar infra.ArticleRepository) *articleHandlerImpl {
+func New(ar infra.ArticleRepository) *articleHandlerImpl {
 	return &articleHandlerImpl{
 		ar: ar,
 	}

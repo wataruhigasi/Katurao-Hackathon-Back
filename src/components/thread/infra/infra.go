@@ -12,13 +12,14 @@ import (
 type ThreadRepository interface {
 	FindAll() ([]*model.Thread, error)
 	Create(*model.Thread) (sql.Result, error)
+	CreateTx(*sql.Tx, *model.Thread) (sql.Result, error)
 }
 
 type threadRepositoryImpl struct {
 	conn *sql.DB
 }
 
-func NewThreadRepository(conn *sql.DB) *threadRepositoryImpl {
+func NewRepo(conn *sql.DB) *threadRepositoryImpl {
 	return &threadRepositoryImpl{
 		conn: conn,
 	}
@@ -84,5 +85,31 @@ func (tr *threadRepositoryImpl) Create(t *model.Thread) (sql.Result, error) {
 	}
 
 	return res, nil
+}
 
+func (tr *threadRepositoryImpl) CreateTx(tx *sql.Tx, t *model.Thread) (sql.Result, error) {
+	pos := &types.JSON{}
+	if err := pos.Marshal(t.Position); err != nil {
+		return nil, err
+	}
+
+	dto := models.Thread{
+		Title:    t.Title,
+		Position: *pos,
+	}
+
+	// ここで、ORMを使っていないのはsql.Resultを返して、そのメソッドのLastInsertID()を使うため
+	// Exec()によって、sql.Resultが返るがsqlboilerのInsertでは返さない
+
+	p, err := tx.Prepare("INSERT INTO threads (title, position) VALUES (?, ?)")
+	if err != nil {
+		return nil, err
+	}
+
+	res, err := p.Exec(dto.Title, *pos)
+	if err != nil {
+		return nil, err
+	}
+
+	return res, nil
 }
