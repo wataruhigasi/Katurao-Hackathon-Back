@@ -18,7 +18,7 @@ type commentHandlerImpl struct {
 	cr infra.CommentRepository
 }
 
-func NewCommentHandler(cr infra.CommentRepository) *commentHandlerImpl {
+func New(cr infra.CommentRepository) *commentHandlerImpl {
 	return &commentHandlerImpl{
 		cr: cr,
 	}

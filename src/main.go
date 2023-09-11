@@ -11,14 +11,14 @@ import (
 	"github.com/go-sql-driver/mysql"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
-	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/handler"
-	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/infra"
-	handlerc "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/handler"
-	infrac "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/infra"
+	article_handler "github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/handler"
+	article_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/infra"
+	comment_handler "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/handler"
+	comment_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/infra"
 
-	handlert "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/handler"
-	infrat "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/infra"
-	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/usecase"
+	thread_handler "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/handler"
+	thread_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/infra"
+	thread_usecase "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/usecase"
 )
 
 func main() {
@@ -27,15 +27,15 @@ func main() {
 		log.Fatal(err)
 	}
 
-	ar := infra.NewArticleRepository(conn)
-	ah := handler.NewArticleHandler(ar)
+	ar := article_infra.NewRepo(conn)
+	ah := article_handler.New(ar)
 
-	cr := infrac.NewCommentRepository(conn)
-	ch := handlerc.NewCommentHandler(cr)
+	cr := comment_infra.NewRepo(conn)
+	ch := comment_handler.New(cr)
 
-	tr := infrat.NewThreadRepository(conn)
-	tu := usecase.NewThreadUsecase(tr, cr)
-	th := handlert.NewThreadHandler(tu)
+	tr := thread_infra.NewRepo(conn)
+	tu := thread_usecase.New(tr, cr)
+	th := thread_handler.New(tu)
 
 	e := echo.New()
 	e.Use(middleware.CORS())

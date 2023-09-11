@@ -18,7 +18,7 @@ type threadHandlerImpl struct {
 	tu usecase.ThreadUsecase
 }
 
-func NewThreadHandler(tu usecase.ThreadUsecase) *threadHandlerImpl {
+func New(tu usecase.ThreadUsecase) *threadHandlerImpl {
 	return &threadHandlerImpl{
 		tu: tu,
 	}
