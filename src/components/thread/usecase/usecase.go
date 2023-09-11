@@ -16,11 +16,11 @@ type Usecase interface {
 
 type usecaseImpl struct {
 	tr  infra.Repo
-	cr  infrac.CommentRepo
+	cr  infrac.Repo
 	txr transaction_infra.Repo
 }
 
-func New(tr infra.Repo, cr infrac.CommentRepo) *usecaseImpl {
+func New(tr infra.Repo, cr infrac.Repo) *usecaseImpl {
 	return &usecaseImpl{
 		tr: tr,
 		cr: cr,

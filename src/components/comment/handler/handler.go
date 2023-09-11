@@ -9,22 +9,22 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
 )
 
-type CommentHandler interface {
+type Handler interface {
 	GetAll() echo.HandlerFunc
 	Create(c echo.Context) error
 }
 
-type commentHandlerImpl struct {
-	cr infra.CommentRepo
+type handlerImpl struct {
+	cr infra.Repo
 }
 
-func New(cr infra.CommentRepo) *commentHandlerImpl {
-	return &commentHandlerImpl{
+func New(cr infra.Repo) *handlerImpl {
+	return &handlerImpl{
 		cr: cr,
 	}
 }
 
-func (ch *commentHandlerImpl) GetAll(c echo.Context) error {
+func (ch *handlerImpl) GetAll(c echo.Context) error {
 	id := c.Param("thread_id")
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
@@ -40,7 +40,7 @@ func (ch *commentHandlerImpl) GetAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, comments)
 }
 
-func (ch *commentHandlerImpl) Create(c echo.Context) error {
+func (ch *handlerImpl) Create(c echo.Context) error {
 	id := c.Param("thread_id")
 	comment := new(model.Comment)
 	if err := c.Bind(comment); err != nil {

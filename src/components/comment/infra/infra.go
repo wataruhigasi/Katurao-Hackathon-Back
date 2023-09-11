@@ -10,23 +10,23 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/models"
 )
 
-type CommentRepo interface {
+type Repo interface {
 	FindAll(int) ([]*model.Comment, error)
 	Create(*model.Comment, int64) error
 	CreateTx(*sql.Tx, *model.Comment, int64) error
 }
 
-type commentRepoImpl struct {
+type repoImpl struct {
 	conn *sql.DB
 }
 
-func NewRepo(conn *sql.DB) *commentRepoImpl {
-	return &commentRepoImpl{
+func NewRepo(conn *sql.DB) *repoImpl {
+	return &repoImpl{
 		conn: conn,
 	}
 }
 
-func (cr *commentRepoImpl) FindAll(id int) ([]*model.Comment, error) {
+func (cr *repoImpl) FindAll(id int) ([]*model.Comment, error) {
 	ctx := context.Background()
 
 	dto, err := models.Comments(qm.Where("thread_id = ?", id)).All(ctx, cr.conn)
@@ -37,7 +37,7 @@ func (cr *commentRepoImpl) FindAll(id int) ([]*model.Comment, error) {
 
 	cs := make([]*model.Comment, 0, len(dto))
 	for _, v := range dto {
-		c, err := ToComment(v)
+		c, err := toComment(v)
 		if err != nil {
 			return nil, err
 		}
@@ -47,7 +47,7 @@ func (cr *commentRepoImpl) FindAll(id int) ([]*model.Comment, error) {
 	return cs, nil
 }
 
-func ToComment(c *models.Comment) (*model.Comment, error) {
+func toComment(c *models.Comment) (*model.Comment, error) {
 
 	return &model.Comment{
 		ID:        int(c.ID),
@@ -57,7 +57,7 @@ func ToComment(c *models.Comment) (*model.Comment, error) {
 	}, nil
 }
 
-func (cr *commentRepoImpl) Create(c *model.Comment, threadID int64) error {
+func (cr *repoImpl) Create(c *model.Comment, threadID int64) error {
 	ctx := context.Background()
 
 	dto := models.Comment{
@@ -70,7 +70,7 @@ func (cr *commentRepoImpl) Create(c *model.Comment, threadID int64) error {
 	return dto.Insert(ctx, cr.conn, boil.Infer())
 }
 
-func (cr *commentRepoImpl) CreateTx(tx *sql.Tx, c *model.Comment, threadID int64) error {
+func (cr *repoImpl) CreateTx(tx *sql.Tx, c *model.Comment, threadID int64) error {
 	ctx := context.Background()
 
 	dto := models.Comment{
