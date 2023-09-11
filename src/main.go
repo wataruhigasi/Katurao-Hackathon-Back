@@ -15,6 +15,10 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/infra"
 	handlerc "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/handler"
 	infrac "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/infra"
+
+	handlert "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/handler"
+	infrat "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/infra"
+	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/usecase"
 )
 
 func main() {
@@ -29,6 +33,10 @@ func main() {
 	cr := infrac.NewCommentRepository(conn)
 	ch := handlerc.NewCommentHandler(cr)
 
+	tr := infrat.NewThreadRepository(conn)
+	tu := usecase.NewThreadUsecase(tr, cr)
+	th := handlert.NewThreadHandler(tu)
+
 	e := echo.New()
 	e.Use(middleware.CORS())
 
@@ -38,6 +46,9 @@ func main() {
 
 	e.GET("/thread/:thread_id/comments", ch.GetAll)
 	e.POST("/thread/:thread_id/comment", ch.Create)
+
+	e.GET("/threads", th.GetAll)
+	e.POST("/thread", th.Create)
 
 	log.Fatal(e.Start(":8080"))
 }
