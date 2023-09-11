@@ -16,9 +16,10 @@ type threadUsecaseImpl struct {
 	cr infrac.CommentRepository
 }
 
-func NewThreadUsecase(tr infra.ThreadRepository) *threadUsecaseImpl {
+func NewThreadUsecase(tr infra.ThreadRepository, cr infrac.CommentRepository) *threadUsecaseImpl {
 	return &threadUsecaseImpl{
 		tr: tr,
+		cr: cr,
 	}
 }
 
@@ -32,12 +33,12 @@ func (tu *threadUsecaseImpl) Create(t *model.Thread, c *model.Comment) error {
 		return err
 	}
 
-	id, err := res.LastInsertId()
+	threadID, err := res.LastInsertId()
 	if err != nil {
 		return err
 	}
 
-	if err := tu.cr.Create(c, int(id)); err != nil {
+	if err := tu.cr.Create(c, threadID); err != nil {
 		return err
 	}
 
