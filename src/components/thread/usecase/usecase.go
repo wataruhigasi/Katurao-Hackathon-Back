@@ -20,10 +20,11 @@ type threadUsecaseImpl struct {
 	txr transaction_infra.Repo
 }
 
-func New(tr infra.ThreadRepository, cr infrac.CommentRepository) *threadUsecaseImpl {
+func New(tr infra.ThreadRepository, cr infrac.CommentRepository, txr transaction_infra.Repo) *threadUsecaseImpl {
 	return &threadUsecaseImpl{
 		tr: tr,
 		cr: cr,
+		txr: txr,
 	}
 }
 
