@@ -10,26 +10,26 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/models"
 )
 
-type CommentRepository interface {
+type Repo interface {
 	FindAll(int) ([]*model.Comment, error)
 	Create(*model.Comment, int64) error
 	CreateTx(*sql.Tx, *model.Comment, int64) error
 }
 
-type commentRepositoryImpl struct {
+type repoImpl struct {
 	conn *sql.DB
 }
 
-func NewRepo(conn *sql.DB) *commentRepositoryImpl {
-	return &commentRepositoryImpl{
+func NewRepo(conn *sql.DB) *repoImpl {
+	return &repoImpl{
 		conn: conn,
 	}
 }
 
-func (cr *commentRepositoryImpl) FindAll(id int) ([]*model.Comment, error) {
+func (r *repoImpl) FindAll(id int) ([]*model.Comment, error) {
 	ctx := context.Background()
 
-	dto, err := models.Comments(qm.Where("thread_id = ?", id)).All(ctx, cr.conn)
+	dto, err := models.Comments(qm.Where("thread_id = ?", id)).All(ctx, r.conn)
 
 	if err != nil {
 		return nil, err
@@ -37,7 +37,7 @@ func (cr *commentRepositoryImpl) FindAll(id int) ([]*model.Comment, error) {
 
 	cs := make([]*model.Comment, 0, len(dto))
 	for _, v := range dto {
-		c, err := ToComment(v)
+		c, err := toComment(v)
 		if err != nil {
 			return nil, err
 		}
@@ -47,7 +47,7 @@ func (cr *commentRepositoryImpl) FindAll(id int) ([]*model.Comment, error) {
 	return cs, nil
 }
 
-func ToComment(c *models.Comment) (*model.Comment, error) {
+func toComment(c *models.Comment) (*model.Comment, error) {
 
 	return &model.Comment{
 		ID:        int(c.ID),
@@ -57,7 +57,7 @@ func ToComment(c *models.Comment) (*model.Comment, error) {
 	}, nil
 }
 
-func (cr *commentRepositoryImpl) Create(c *model.Comment, threadID int64) error {
+func (r *repoImpl) Create(c *model.Comment, threadID int64) error {
 	ctx := context.Background()
 
 	dto := models.Comment{
@@ -67,10 +67,10 @@ func (cr *commentRepositoryImpl) Create(c *model.Comment, threadID int64) error 
 		ThreadID: threadID,
 	}
 
-	return dto.Insert(ctx, cr.conn, boil.Infer())
+	return dto.Insert(ctx, r.conn, boil.Infer())
 }
 
-func (cr *commentRepositoryImpl) CreateTx(tx *sql.Tx, c *model.Comment, threadID int64) error {
+func (r *repoImpl) CreateTx(tx *sql.Tx, c *model.Comment, threadID int64) error {
 	ctx := context.Background()
 
 	dto := models.Comment{

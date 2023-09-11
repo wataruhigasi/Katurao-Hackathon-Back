@@ -9,23 +9,23 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
 )
 
-type ThreadHandler interface {
+type Handler interface {
 	GetAll() echo.HandlerFunc
 	Create(c echo.Context) error
 }
 
-type threadHandlerImpl struct {
-	tu usecase.ThreadUsecase
+type handlerImpl struct {
+	u usecase.Usecase
 }
 
-func New(tu usecase.ThreadUsecase) *threadHandlerImpl {
-	return &threadHandlerImpl{
-		tu: tu,
+func New(u usecase.Usecase) *handlerImpl {
+	return &handlerImpl{
+		u: u,
 	}
 }
 
-func (th *threadHandlerImpl) GetAll(c echo.Context) error {
-	threads, err := th.tu.FindAll()
+func (h *handlerImpl) GetAll(c echo.Context) error {
+	threads, err := h.u.FindAll()
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
@@ -40,7 +40,7 @@ type createReq struct {
 	Position model.Position `json:"position"`
 }
 
-func (th *threadHandlerImpl) Create(c echo.Context) error {
+func (h *handlerImpl) Create(c echo.Context) error {
 	req := new(createReq)
 	if err := c.Bind(req); err != nil {
 		c.Logger().Error(err)
@@ -57,7 +57,7 @@ func (th *threadHandlerImpl) Create(c echo.Context) error {
 		Author: req.Author,
 	}
 
-	if err := th.tu.Create(t, com); err != nil {
+	if err := h.u.Create(t, com); err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}

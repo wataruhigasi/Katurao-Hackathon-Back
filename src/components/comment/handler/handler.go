@@ -9,22 +9,22 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
 )
 
-type CommentHandler interface {
+type Handler interface {
 	GetAll() echo.HandlerFunc
 	Create(c echo.Context) error
 }
 
-type commentHandlerImpl struct {
-	cr infra.CommentRepository
+type handlerImpl struct {
+	r infra.Repo
 }
 
-func New(cr infra.CommentRepository) *commentHandlerImpl {
-	return &commentHandlerImpl{
-		cr: cr,
+func New(r infra.Repo) *handlerImpl {
+	return &handlerImpl{
+		r: r,
 	}
 }
 
-func (ch *commentHandlerImpl) GetAll(c echo.Context) error {
+func (h *handlerImpl) GetAll(c echo.Context) error {
 	id := c.Param("thread_id")
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
@@ -32,7 +32,7 @@ func (ch *commentHandlerImpl) GetAll(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	comments, err := ch.cr.FindAll(idInt)
+	comments, err := h.r.FindAll(idInt)
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
@@ -40,7 +40,7 @@ func (ch *commentHandlerImpl) GetAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, comments)
 }
 
-func (ch *commentHandlerImpl) Create(c echo.Context) error {
+func (h *handlerImpl) Create(c echo.Context) error {
 	id := c.Param("thread_id")
 	comment := new(model.Comment)
 	if err := c.Bind(comment); err != nil {
@@ -54,7 +54,7 @@ func (ch *commentHandlerImpl) Create(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	if err := ch.cr.Create(comment, idInt); err != nil {
+	if err := h.r.Create(comment, idInt); err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}

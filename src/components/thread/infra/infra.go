@@ -9,33 +9,33 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/models"
 )
 
-type ThreadRepository interface {
+type Repo interface {
 	FindAll() ([]*model.Thread, error)
 	Create(*model.Thread) (sql.Result, error)
 	CreateTx(*sql.Tx, *model.Thread) (sql.Result, error)
 }
 
-type threadRepositoryImpl struct {
+type repoImpl struct {
 	conn *sql.DB
 }
 
-func NewRepo(conn *sql.DB) *threadRepositoryImpl {
-	return &threadRepositoryImpl{
+func NewRepo(conn *sql.DB) *repoImpl {
+	return &repoImpl{
 		conn: conn,
 	}
 }
 
-func (tr *threadRepositoryImpl) FindAll() ([]*model.Thread, error) {
+func (r *repoImpl) FindAll() ([]*model.Thread, error) {
 	ctx := context.Background()
 
-	dto, err := models.Threads().All(ctx, tr.conn)
+	dto, err := models.Threads().All(ctx, r.conn)
 	if err != nil {
 		return nil, err
 	}
 
 	ts := make([]*model.Thread, 0, len(dto))
 	for _, v := range dto {
-		t, err := ToThread(v)
+		t, err := toThread(v)
 		if err != nil {
 			return nil, err
 		}
@@ -45,7 +45,7 @@ func (tr *threadRepositoryImpl) FindAll() ([]*model.Thread, error) {
 	return ts, nil
 }
 
-func ToThread(t *models.Thread) (*model.Thread, error) {
+func toThread(t *models.Thread) (*model.Thread, error) {
 	var p model.Position
 	if err := t.Position.Unmarshal(&p); err != nil {
 		return nil, err
@@ -60,7 +60,7 @@ func ToThread(t *models.Thread) (*model.Thread, error) {
 	}, nil
 }
 
-func (tr *threadRepositoryImpl) Create(t *model.Thread) (sql.Result, error) {
+func (r *repoImpl) Create(t *model.Thread) (sql.Result, error) {
 	pos := &types.JSON{}
 	if err := pos.Marshal(t.Position); err != nil {
 		return nil, err
@@ -74,7 +74,7 @@ func (tr *threadRepositoryImpl) Create(t *model.Thread) (sql.Result, error) {
 	// ここで、ORMを使っていないのはsql.Resultを返して、そのメソッドのLastInsertID()を使うため
 	// Exec()によって、sql.Resultが返るがsqlboilerのInsertでは返さない
 
-	p, err := tr.conn.Prepare("INSERT INTO threads (title, position) VALUES (?, ?)")
+	p, err := r.conn.Prepare("INSERT INTO threads (title, position) VALUES (?, ?)")
 	if err != nil {
 		return nil, err
 	}
@@ -87,7 +87,7 @@ func (tr *threadRepositoryImpl) Create(t *model.Thread) (sql.Result, error) {
 	return res, nil
 }
 
-func (tr *threadRepositoryImpl) CreateTx(tx *sql.Tx, t *model.Thread) (sql.Result, error) {
+func (r *repoImpl) CreateTx(tx *sql.Tx, t *model.Thread) (sql.Result, error) {
 	pos := &types.JSON{}
 	if err := pos.Marshal(t.Position); err != nil {
 		return nil, err
