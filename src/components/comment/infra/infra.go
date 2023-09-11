@@ -13,13 +13,14 @@ import (
 type CommentRepository interface {
 	FindAll(int) ([]*model.Comment, error)
 	Create(*model.Comment, int64) error
+	CreateTx(*sql.Tx, *model.Comment, int64) error
 }
 
 type commentRepositoryImpl struct {
 	conn *sql.DB
 }
 
-func NewCommentRepository(conn *sql.DB) *commentRepositoryImpl {
+func NewRepo(conn *sql.DB) *commentRepositoryImpl {
 	return &commentRepositoryImpl{
 		conn: conn,
 	}
@@ -67,4 +68,17 @@ func (cr *commentRepositoryImpl) Create(c *model.Comment, threadID int64) error 
 	}
 
 	return dto.Insert(ctx, cr.conn, boil.Infer())
+}
+
+func (cr *commentRepositoryImpl) CreateTx(tx *sql.Tx, c *model.Comment, threadID int64) error {
+	ctx := context.Background()
+
+	dto := models.Comment{
+		ID:       int64(c.ID),
+		Body:     c.Body,
+		Author:   c.Author,
+		ThreadID: threadID,
+	}
+
+	return dto.Insert(ctx, tx, boil.Infer())
 }
