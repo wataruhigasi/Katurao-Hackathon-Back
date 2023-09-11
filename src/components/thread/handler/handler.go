@@ -9,22 +9,22 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
 )
 
-type ThreadHandler interface {
+type Handler interface {
 	GetAll() echo.HandlerFunc
 	Create(c echo.Context) error
 }
 
-type threadHandlerImpl struct {
-	tu usecase.ThreadUsecase
+type handlerImpl struct {
+	tu usecase.Usecase
 }
 
-func New(tu usecase.ThreadUsecase) *threadHandlerImpl {
-	return &threadHandlerImpl{
+func New(tu usecase.Usecase) *handlerImpl {
+	return &handlerImpl{
 		tu: tu,
 	}
 }
 
-func (th *threadHandlerImpl) GetAll(c echo.Context) error {
+func (th *handlerImpl) GetAll(c echo.Context) error {
 	threads, err := th.tu.FindAll()
 	if err != nil {
 		c.Logger().Error(err)
@@ -39,7 +39,7 @@ type createReq struct {
 	Author string `json:"author"`
 }
 
-func (th *threadHandlerImpl) Create(c echo.Context) error {
+func (th *handlerImpl) Create(c echo.Context) error {
 	req := new(createReq)
 	if err := c.Bind(req); err != nil {
 		c.Logger().Error(err)

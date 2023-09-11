@@ -9,29 +9,29 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
 )
 
-type ThreadUsecase interface {
+type Usecase interface {
 	FindAll() ([]*model.Thread, error)
 	Create(t *model.Thread, c *model.Comment) error
 }
 
-type threadUsecaseImpl struct {
-	tr  infra.ThreadRepo
+type usecaseImpl struct {
+	tr  infra.Repo
 	cr  infrac.CommentRepo
 	txr transaction_infra.Repo
 }
 
-func New(tr infra.ThreadRepo, cr infrac.CommentRepo) *threadUsecaseImpl {
-	return &threadUsecaseImpl{
+func New(tr infra.Repo, cr infrac.CommentRepo) *usecaseImpl {
+	return &usecaseImpl{
 		tr: tr,
 		cr: cr,
 	}
 }
 
-func (tu *threadUsecaseImpl) FindAll() ([]*model.Thread, error) {
+func (tu *usecaseImpl) FindAll() ([]*model.Thread, error) {
 	return tu.tr.FindAll()
 }
 
-func (tu *threadUsecaseImpl) Create(t *model.Thread, c *model.Comment) error {
+func (tu *usecaseImpl) Create(t *model.Thread, c *model.Comment) error {
 	err := tu.txr.Transaction(
 		func(tx *sql.Tx) error {
 			res, err := tu.tr.CreateTx(tx, t)

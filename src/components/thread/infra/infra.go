@@ -9,23 +9,23 @@ import (
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/models"
 )
 
-type ThreadRepo interface {
+type Repo interface {
 	FindAll() ([]*model.Thread, error)
 	Create(*model.Thread) (sql.Result, error)
 	CreateTx(*sql.Tx, *model.Thread) (sql.Result, error)
 }
 
-type threadRepoImpl struct {
+type repoImpl struct {
 	conn *sql.DB
 }
 
-func NewRepo(conn *sql.DB) *threadRepoImpl {
-	return &threadRepoImpl{
+func NewRepo(conn *sql.DB) *repoImpl {
+	return &repoImpl{
 		conn: conn,
 	}
 }
 
-func (tr *threadRepoImpl) FindAll() ([]*model.Thread, error) {
+func (tr *repoImpl) FindAll() ([]*model.Thread, error) {
 	ctx := context.Background()
 
 	dto, err := models.Threads().All(ctx, tr.conn)
@@ -60,7 +60,7 @@ func ToThread(t *models.Thread) (*model.Thread, error) {
 	}, nil
 }
 
-func (tr *threadRepoImpl) Create(t *model.Thread) (sql.Result, error) {
+func (tr *repoImpl) Create(t *model.Thread) (sql.Result, error) {
 	pos := &types.JSON{}
 	if err := pos.Marshal(t.Position); err != nil {
 		return nil, err
@@ -87,7 +87,7 @@ func (tr *threadRepoImpl) Create(t *model.Thread) (sql.Result, error) {
 	return res, nil
 }
 
-func (tr *threadRepoImpl) CreateTx(tx *sql.Tx, t *model.Thread) (sql.Result, error) {
+func (tr *repoImpl) CreateTx(tx *sql.Tx, t *model.Thread) (sql.Result, error) {
 	pos := &types.JSON{}
 	if err := pos.Marshal(t.Position); err != nil {
 		return nil, err
