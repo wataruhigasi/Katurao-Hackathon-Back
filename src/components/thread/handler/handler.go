@@ -33,17 +33,26 @@ func (th *threadHandlerImpl) GetAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, threads)
 }
 
+type createReq struct {
+	Title  string `json:"title"`
+	Body   string `json:"body"`
+	Author string `json:"author"`
+}
+
 func (th *threadHandlerImpl) Create(c echo.Context) error {
-	t := new(model.Thread)
-	if err := c.Bind(t); err != nil {
+	req := new(createReq)
+	if err := c.Bind(req); err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	com := new(model.Comment)
-	if err := c.Bind(com); err != nil {
-		c.Logger().Error(err)
-		return echo.NewHTTPError(http.StatusBadRequest, err)
+	t := &model.Thread{
+		Title: req.Title,
+	}
+
+	com := &model.Comment{
+		Body:   req.Body,
+		Author: req.Author,
 	}
 
 	if err := th.tu.Create(t, com); err != nil {
