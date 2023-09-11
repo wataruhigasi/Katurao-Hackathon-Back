@@ -72,25 +72,25 @@ func ToThread(t *models.Thread) (*model.Thread, error) {
 }
 
 func (tr *threadRepositoryImpl) Create(t *model.Thread) (sql.Result, error) {
-	// ctx := context.Background()
-
-	json := &types.JSON{}
-	if err := json.Marshal(t.Position); err != nil {
+	pos := &types.JSON{}
+	if err := pos.Marshal(t.Position); err != nil {
 		return nil, err
 	}
 
 	dto := models.Thread{
-		ID:       int64(t.ID),
 		Title:    t.Title,
-		Position: *json,
+		Position: *pos,
 	}
 
-	p, err := tr.conn.Prepare("INSERT INTO articles (title) VALUES (?)")
+	// ここで、ORMを使っていないのはsql.Resultを返して、そのメソッドのLastInsertID()を使うため
+	// Exec()によって、sql.Resultが返るがsqlboilerのInsertでは返さない
+
+	p, err := tr.conn.Prepare("INSERT INTO threads (title, position) VALUES (?, ?)")
 	if err != nil {
 		return nil, err
 	}
 
-	res, err := p.Exec(dto.Title)
+	res, err := p.Exec(dto.Title, *pos)
 	if err != nil {
 		return nil, err
 	}

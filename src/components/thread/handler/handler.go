@@ -4,7 +4,7 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/infra"
+	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/usecase"
 
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
 )
@@ -15,17 +15,17 @@ type ThreadHandler interface {
 }
 
 type threadHandlerImpl struct {
-	tr infra.ThreadRepository
+	tu usecase.ThreadUsecase
 }
 
-func NewThreadHandler(tr infra.ThreadRepository) *threadHandlerImpl {
+func NewThreadHandler(tu usecase.ThreadUsecase) *threadHandlerImpl {
 	return &threadHandlerImpl{
-		tr: tr,
+		tu: tu,
 	}
 }
 
 func (th *threadHandlerImpl) GetAll(c echo.Context) error {
-	threads, err := th.tr.FindAll()
+	threads, err := th.tu.FindAll()
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
@@ -35,28 +35,21 @@ func (th *threadHandlerImpl) GetAll(c echo.Context) error {
 
 func (th *threadHandlerImpl) Create(c echo.Context) error {
 	t := new(model.Thread)
-
 	if err := c.Bind(t); err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	res, err := th.tr.Create(t)
+	com := new(model.Comment)
+	if err := c.Bind(com); err != nil {
+		c.Logger().Error(err)
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
 
+	if err := th.tu.Create(t, com); err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
 
 	return c.NoContent(http.StatusOK)
 }
-
-// comment := new(model.Comment)
-// if err := c.Bind(comment); err != nil {
-// 	c.Logger().Error(err)
-// 	return echo.NewHTTPError(http.StatusBadRequest, err)
-// }
-
-// if err := th.cr.Create(comment, idInt); err != nil {
-// 	c.Logger().Error(err)
-// 	return echo.NewHTTPError(http.StatusInternalServerError, err)
-// }
