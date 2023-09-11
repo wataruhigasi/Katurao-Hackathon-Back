@@ -35,7 +35,7 @@ func (tr *repoImpl) FindAll() ([]*model.Thread, error) {
 
 	ts := make([]*model.Thread, 0, len(dto))
 	for _, v := range dto {
-		t, err := ToThread(v)
+		t, err := toThread(v)
 		if err != nil {
 			return nil, err
 		}
@@ -45,7 +45,7 @@ func (tr *repoImpl) FindAll() ([]*model.Thread, error) {
 	return ts, nil
 }
 
-func ToThread(t *models.Thread) (*model.Thread, error) {
+func toThread(t *models.Thread) (*model.Thread, error) {
 	var p model.Position
 	if err := t.Position.Unmarshal(&p); err != nil {
 		return nil, err
