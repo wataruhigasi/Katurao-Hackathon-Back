@@ -25,10 +25,10 @@ func NewRepo(conn *sql.DB) *repoImpl {
 	}
 }
 
-func (ar *repoImpl) FindAll() ([]*model.Article, error) {
+func (r *repoImpl) FindAll() ([]*model.Article, error) {
 	ctx := context.Background()
 
-	dto, err := models.Articles().All(ctx, ar.conn)
+	dto, err := models.Articles().All(ctx, r.conn)
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +60,7 @@ func toArticle(a *models.Article) (*model.Article, error) {
 	}, nil
 }
 
-func (ar *repoImpl) Create(a *model.Article) error {
+func (r *repoImpl) Create(a *model.Article) error {
 	ctx := context.Background()
 
 	json := &types.JSON{}
@@ -76,5 +76,5 @@ func (ar *repoImpl) Create(a *model.Article) error {
 		Position: *json,
 	}
 
-	return dto.Insert(ctx, ar.conn, boil.Infer())
+	return dto.Insert(ctx, r.conn, boil.Infer())
 }
