@@ -17,6 +17,7 @@ import (
 
 	handlert "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/handler"
 	infrat "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/infra"
+	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/usecase"
 )
 
 func main() {
@@ -32,7 +33,8 @@ func main() {
 	ch := handlerc.NewCommentHandler(cr)
 
 	tr := infrat.NewThreadRepository(conn)
-	th := handlert.NewThreadHandler(tr)
+	tu := usecase.NewThreadUsecase(tr)
+	th := handlert.NewThreadHandler(tu)
 
 	e := echo.New()
 
