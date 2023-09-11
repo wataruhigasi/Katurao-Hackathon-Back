@@ -32,6 +32,12 @@ services:
     ports:
       - "3306:3306"
 
+  swagger-editor:
+    image: swaggerapi/swagger-editor
+    container_name: "swagger-editor"
+    ports:
+      - "8002:8080"
+
   swagger-ui:
     image: swaggerapi/swagger-ui
     container_name: "swagger-ui"
