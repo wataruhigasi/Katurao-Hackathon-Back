@@ -23,6 +23,9 @@ import (
 
 	keijiban_rakugaki_handler "github.com/wataruhigasi/Katurao-Hackathon-Back/components/keijiban_rakugaki/handler"
 	keijiban_rakugaki_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/keijiban_rakugaki/infra"
+
+	thread_rakugaki_handler "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread_rakugaki/handler"
+	thread_rakugaki_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread_rakugaki/infra"
 )
 
 func main() {
@@ -45,6 +48,9 @@ func main() {
 	krr := keijiban_rakugaki_infra.NewRepo(conn)
 	krh := keijiban_rakugaki_handler.New(krr)
 
+	trr := thread_rakugaki_infra.NewRepo(conn)
+	trh := thread_rakugaki_handler.New(trr)
+
 	e := echo.New()
 	e.Use(middleware.CORS())
 
@@ -62,6 +68,9 @@ func main() {
 
 	e.GET("/keijiban/rakugakis", krh.GetAll)
 	e.POST("/keijiban/rakugaki", krh.Create)
+
+	e.GET("/thread/:thread_id/rakugakis", trh.GetAll)
+	e.POST("/thread/:thread_id/rakugaki", trh.Create)
 
 	log.Fatal(e.Start(":8080"))
 }
