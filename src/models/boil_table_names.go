@@ -4,11 +4,15 @@
 package models
 
 var TableNames = struct {
-	Articles string
-	Comments string
-	Threads  string
+	Articles         string
+	Comments         string
+	KeijibanRakugaki string
+	ThreadRakugaki   string
+	Threads          string
 }{
-	Articles: "articles",
-	Comments: "comments",
-	Threads:  "threads",
+	Articles:         "articles",
+	Comments:         "comments",
+	KeijibanRakugaki: "keijiban_rakugaki",
+	ThreadRakugaki:   "thread_rakugaki",
+	Threads:          "threads",
 }

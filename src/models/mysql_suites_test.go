@@ -10,5 +10,9 @@ func TestUpsert(t *testing.T) {
 
 	t.Run("Comments", testCommentsUpsert)
 
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisUpsert)
+
+	t.Run("ThreadRakugakis", testThreadRakugakisUpsert)
+
 	t.Run("Threads", testThreadsUpsert)
 }

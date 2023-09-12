@@ -14,66 +14,88 @@ import "testing"
 func TestParent(t *testing.T) {
 	t.Run("Articles", testArticles)
 	t.Run("Comments", testComments)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakis)
+	t.Run("ThreadRakugakis", testThreadRakugakis)
 	t.Run("Threads", testThreads)
 }
 
 func TestDelete(t *testing.T) {
 	t.Run("Articles", testArticlesDelete)
 	t.Run("Comments", testCommentsDelete)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisDelete)
+	t.Run("ThreadRakugakis", testThreadRakugakisDelete)
 	t.Run("Threads", testThreadsDelete)
 }
 
 func TestQueryDeleteAll(t *testing.T) {
 	t.Run("Articles", testArticlesQueryDeleteAll)
 	t.Run("Comments", testCommentsQueryDeleteAll)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisQueryDeleteAll)
+	t.Run("ThreadRakugakis", testThreadRakugakisQueryDeleteAll)
 	t.Run("Threads", testThreadsQueryDeleteAll)
 }
 
 func TestSliceDeleteAll(t *testing.T) {
 	t.Run("Articles", testArticlesSliceDeleteAll)
 	t.Run("Comments", testCommentsSliceDeleteAll)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisSliceDeleteAll)
+	t.Run("ThreadRakugakis", testThreadRakugakisSliceDeleteAll)
 	t.Run("Threads", testThreadsSliceDeleteAll)
 }
 
 func TestExists(t *testing.T) {
 	t.Run("Articles", testArticlesExists)
 	t.Run("Comments", testCommentsExists)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisExists)
+	t.Run("ThreadRakugakis", testThreadRakugakisExists)
 	t.Run("Threads", testThreadsExists)
 }
 
 func TestFind(t *testing.T) {
 	t.Run("Articles", testArticlesFind)
 	t.Run("Comments", testCommentsFind)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisFind)
+	t.Run("ThreadRakugakis", testThreadRakugakisFind)
 	t.Run("Threads", testThreadsFind)
 }
 
 func TestBind(t *testing.T) {
 	t.Run("Articles", testArticlesBind)
 	t.Run("Comments", testCommentsBind)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisBind)
+	t.Run("ThreadRakugakis", testThreadRakugakisBind)
 	t.Run("Threads", testThreadsBind)
 }
 
 func TestOne(t *testing.T) {
 	t.Run("Articles", testArticlesOne)
 	t.Run("Comments", testCommentsOne)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisOne)
+	t.Run("ThreadRakugakis", testThreadRakugakisOne)
 	t.Run("Threads", testThreadsOne)
 }
 
 func TestAll(t *testing.T) {
 	t.Run("Articles", testArticlesAll)
 	t.Run("Comments", testCommentsAll)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisAll)
+	t.Run("ThreadRakugakis", testThreadRakugakisAll)
 	t.Run("Threads", testThreadsAll)
 }
 
 func TestCount(t *testing.T) {
 	t.Run("Articles", testArticlesCount)
 	t.Run("Comments", testCommentsCount)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisCount)
+	t.Run("ThreadRakugakis", testThreadRakugakisCount)
 	t.Run("Threads", testThreadsCount)
 }
 
 func TestHooks(t *testing.T) {
 	t.Run("Articles", testArticlesHooks)
 	t.Run("Comments", testCommentsHooks)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisHooks)
+	t.Run("ThreadRakugakis", testThreadRakugakisHooks)
 	t.Run("Threads", testThreadsHooks)
 }
 
@@ -82,6 +104,10 @@ func TestInsert(t *testing.T) {
 	t.Run("Articles", testArticlesInsertWhitelist)
 	t.Run("Comments", testCommentsInsert)
 	t.Run("Comments", testCommentsInsertWhitelist)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisInsert)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisInsertWhitelist)
+	t.Run("ThreadRakugakis", testThreadRakugakisInsert)
+	t.Run("ThreadRakugakis", testThreadRakugakisInsertWhitelist)
 	t.Run("Threads", testThreadsInsert)
 	t.Run("Threads", testThreadsInsertWhitelist)
 }
@@ -129,29 +155,39 @@ func TestToManyRemove(t *testing.T) {}
 func TestReload(t *testing.T) {
 	t.Run("Articles", testArticlesReload)
 	t.Run("Comments", testCommentsReload)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisReload)
+	t.Run("ThreadRakugakis", testThreadRakugakisReload)
 	t.Run("Threads", testThreadsReload)
 }
 
 func TestReloadAll(t *testing.T) {
 	t.Run("Articles", testArticlesReloadAll)
 	t.Run("Comments", testCommentsReloadAll)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisReloadAll)
+	t.Run("ThreadRakugakis", testThreadRakugakisReloadAll)
 	t.Run("Threads", testThreadsReloadAll)
 }
 
 func TestSelect(t *testing.T) {
 	t.Run("Articles", testArticlesSelect)
 	t.Run("Comments", testCommentsSelect)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisSelect)
+	t.Run("ThreadRakugakis", testThreadRakugakisSelect)
 	t.Run("Threads", testThreadsSelect)
 }
 
 func TestUpdate(t *testing.T) {
 	t.Run("Articles", testArticlesUpdate)
 	t.Run("Comments", testCommentsUpdate)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisUpdate)
+	t.Run("ThreadRakugakis", testThreadRakugakisUpdate)
 	t.Run("Threads", testThreadsUpdate)
 }
 
 func TestSliceUpdateAll(t *testing.T) {
 	t.Run("Articles", testArticlesSliceUpdateAll)
 	t.Run("Comments", testCommentsSliceUpdateAll)
+	t.Run("KeijibanRakugakis", testKeijibanRakugakisSliceUpdateAll)
+	t.Run("ThreadRakugakis", testThreadRakugakisSliceUpdateAll)
 	t.Run("Threads", testThreadsSliceUpdateAll)
 }
