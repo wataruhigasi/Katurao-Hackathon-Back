@@ -52,6 +52,7 @@ func main() {
 
 	e.GET("/threads", th.GetAll)
 	e.POST("/thread", th.Create)
+	e.PATCH("/thread/:thread_id/position", th.ChangePosition)
 
 	log.Fatal(e.Start(":8080"))
 }

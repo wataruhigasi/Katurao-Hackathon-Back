@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 
+	"github.com/volatiletech/sqlboiler/v4/boil"
 	"github.com/volatiletech/sqlboiler/v4/types"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/models"
@@ -13,6 +14,7 @@ type Repo interface {
 	FindAll() ([]*model.Thread, error)
 	Create(*model.Thread) (sql.Result, error)
 	CreateTx(*sql.Tx, *model.Thread) (sql.Result, error)
+	ChangePosition(int64, *model.Position) error
 }
 
 type repoImpl struct {
@@ -112,4 +114,26 @@ func (r *repoImpl) CreateTx(tx *sql.Tx, t *model.Thread) (sql.Result, error) {
 	}
 
 	return res, nil
+}
+
+func (r *repoImpl) ChangePosition(id int64, p *model.Position) error {
+	ctx := context.Background()
+
+	t, err := models.FindThread(ctx, r.conn, id)
+	if err != nil {
+		return err
+	}
+
+	json := &types.JSON{}
+	if err := json.Marshal(p); err != nil {
+		return err
+	}
+
+	t.Position = *json
+
+	if _, err := t.Update(ctx, r.conn, boil.Infer()); err != nil {
+		return err
+	}
+
+	return nil
 }
