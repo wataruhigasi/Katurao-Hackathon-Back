@@ -29,7 +29,20 @@ func New(r infra.Repo, cr comment_infra.Repo, txr transaction_infra.Repo) *useca
 }
 
 func (u *usecaseImpl) FindAll() ([]*model.Thread, error) {
-	return u.r.FindAll()
+	threads, err := u.r.FindAll()
+	if err != nil {
+		return nil, err
+	}
+
+	for i := range threads {
+		comments, err := u.cr.FindAll(threads[i].ID)
+		if err != nil {
+			return nil, err
+		}
+		threads[i].Comments = comments
+	}
+
+	return threads, nil
 }
 
 func (u *usecaseImpl) Create(t *model.Thread, c *model.Comment) error {
