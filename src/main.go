@@ -20,6 +20,9 @@ import (
 	thread_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/infra"
 	thread_usecase "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/usecase"
 	transaction_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/transaction/infra"
+
+	keijiban_rakugaki_handler "github.com/wataruhigasi/Katurao-Hackathon-Back/components/keijiban_rakugaki/handler"
+	keijiban_rakugaki_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/keijiban_rakugaki/infra"
 )
 
 func main() {
@@ -39,6 +42,9 @@ func main() {
 	tu := thread_usecase.New(tr, cr, txr)
 	th := thread_handler.New(tu)
 
+	krr := keijiban_rakugaki_infra.NewRepo(conn)
+	krh := keijiban_rakugaki_handler.New(krr)
+
 	e := echo.New()
 	e.Use(middleware.CORS())
 
@@ -53,6 +59,9 @@ func main() {
 	e.GET("/threads", th.GetAll)
 	e.POST("/thread", th.Create)
 	e.PATCH("/thread/:thread_id/position", th.ChangePosition)
+
+	e.GET("/keijiban/rakugakis", krh.GetAll)
+	e.POST("/keijiban/rakugaki", krh.Create)
 
 	log.Fatal(e.Start(":8080"))
 }
