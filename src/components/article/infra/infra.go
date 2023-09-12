@@ -13,6 +13,7 @@ import (
 type Repo interface {
 	FindAll() ([]*model.Article, error)
 	Create(*model.Article) error
+	ChangePosition(int64, *model.Position) error
 }
 
 type repoImpl struct {
@@ -77,4 +78,26 @@ func (r *repoImpl) Create(a *model.Article) error {
 	}
 
 	return dto.Insert(ctx, r.conn, boil.Infer())
+}
+
+func (r *repoImpl) ChangePosition(id int64, p *model.Position) error {
+	ctx := context.Background()
+
+	a, err :=models.FindArticle(ctx, r.conn, id)
+	if err != nil {
+		return err
+	}
+
+	json := &types.JSON{}
+	if err := json.Marshal(p); err != nil {
+		return err
+	}
+
+	a.Position = *json
+
+	if _, err := a.Update(ctx, r.conn, boil.Infer()); err != nil {
+		return err
+	}
+
+	return nil
 }

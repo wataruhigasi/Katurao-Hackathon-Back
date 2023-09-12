@@ -45,6 +45,7 @@ func main() {
 	e.GET("/", hello)
 	e.GET("/articles", ah.GetAll)
 	e.POST("/article", ah.Create)
+	e.PATCH("/article/:article_id/position", ah.ChangePosition)
 
 	e.GET("/thread/:thread_id/comments", ch.GetAll)
 	e.POST("/thread/:thread_id/comment", ch.Create)
