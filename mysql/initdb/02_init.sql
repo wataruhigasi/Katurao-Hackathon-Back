@@ -21,3 +21,17 @@ INSERT INTO `comments` (`thread_id`, `body`, `author`) VALUES
   (2, 'Comment 1 for Thread 2', 'Author 3'),
   (3, 'Comment 1 for Thread 3', 'Author 4'),
   (4, 'Comment 1 for Thread 4', 'Author 5');
+
+INSERT INTO `keijiban_rakugaki` (`body`, `position`) VALUES
+  ('svg 1', '{"x": 5, "y": 10}'),
+  ('svg 2', '{"x": 10, "y": 15}'),
+  ('svg 3', '{"x": 15, "y": 20}'),
+  ('svg 4', '{"x": 20, "y": 25}'),
+  ('svg 5', '{"x": 25, "y": 30}');
+
+INSERT INTO `thread_rakugaki` (`body`, `thread_id`, `position`) VALUES
+  ('svg 1', '1', '{"x": 5, "y": 10}'),
+  ('svg 2', '1', '{"x": 10, "y": 15}'),
+  ('svg 3', '3', '{"x": 15, "y": 20}'),
+  ('svg 4', '4', '{"x": 20, "y": 25}'),
+  ('svg 5', '5', '{"x": 25, "y": 30}');
