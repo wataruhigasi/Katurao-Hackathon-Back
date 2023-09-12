@@ -124,6 +124,84 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /threads/{thread_id}/rakugakis:
+    get:
+      tags:
+        - rakugaki
+      description: >
+        特定スレッドの全てのrakugakiを取得する
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Thread_Rakugaki"
+
+  /threads/{thread_id}/rakugaki:
+    post:
+      tags:
+        - rakugaki
+      description: >
+        特定スレッド内のrakugakiを作成する
+      parameters:
+        - name: body
+          description: string
+          required: true
+        - name: position
+          description: json
+          required: true
+          example: { "x": 0, "y": 0 }
+      responses:
+        "204":
+          description: no content
+        "400":
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /keijiban/rakugakis:
+    get:
+      tags:
+        - rakugaki
+      description: >
+        掲示板の全てのrakugakiを取得する
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Keijiban_Rakugaki"
+
+  /keijiban/rakugaki:
+    post:
+      tags:
+        - rakugaki
+      description: >
+        掲示板にrakugakiを作成する
+      parameters:
+        - name: body
+          description: string
+          required: true
+        - name: position
+          description: json
+          required: true
+          example: { "x": 0, "y": 0 }
+      responses:
+        "204":
+          description: no content
+        "400":
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
 components:
   schemas:
     Article:
@@ -173,6 +251,36 @@ components:
           format: "date-time"
         author:
           type: "string"
+
+    Keijiban_Rakugaki:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        body:
+          type: "string"
+        created_at:
+          type: "string"
+          format: "date-time"
+        position:
+          type: json
+          example: { "x": 0, "y": 0 }
+
+    Thread_Rakugaki:
+      type: "object"
+      properties:
+        id:
+          type: "integer"
+        thread_id:
+          type: "integer"
+        body:
+          type: "string"
+        created_at:
+          type: "string"
+          format: "date-time"
+        position:
+          type: json
+          example: { "x": 0, "y": 0 }
 
     Error:
       type: "object"
