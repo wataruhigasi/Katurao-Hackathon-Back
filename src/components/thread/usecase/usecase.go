@@ -12,6 +12,7 @@ import (
 type Usecase interface {
 	FindAll() ([]*model.Thread, error)
 	Create(t *model.Thread, c *model.Comment) error
+	ChangePosition(int64, *model.Position) error
 }
 
 type usecaseImpl struct {
@@ -71,4 +72,8 @@ func (u *usecaseImpl) Create(t *model.Thread, c *model.Comment) error {
 	}
 
 	return nil
+}
+
+func (u *usecaseImpl) ChangePosition(id int64, p *model.Position) error {
+	return u.r.ChangePosition(id, p)
 }
