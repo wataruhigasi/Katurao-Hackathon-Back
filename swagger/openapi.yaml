@@ -124,7 +124,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /threads/{thread_id}/rakugakis:
+  /thread/{thread_id}/rakugakis:
     get:
       tags:
         - rakugaki
@@ -139,7 +139,7 @@ paths:
                 items:
                   $ref: "#/components/schemas/Thread_Rakugaki"
 
-  /threads/{thread_id}/rakugaki:
+  /thread/{thread_id}/rakugaki:
     post:
       tags:
         - rakugaki
