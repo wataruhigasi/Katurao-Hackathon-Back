@@ -14,14 +14,6 @@ INSERT INTO `threads` (`title`, `position`) VALUES
   ('Thread 4', '{"x": 20, "y": 25}'),
   ('Thread 5', '{"x": 25, "y": 30}');
 
--- comments テーブルにデータを挿入
-INSERT INTO `comments` (`thread_id`, `body`, `author`) VALUES
-  (1, 'Comment 1 for Thread 1', 'Author 1'),
-  (1, 'Comment 2 for Thread 1', 'Author 2'),
-  (2, 'Comment 1 for Thread 2', 'Author 3'),
-  (3, 'Comment 1 for Thread 3', 'Author 4'),
-  (4, 'Comment 1 for Thread 4', 'Author 5');
-
 INSERT INTO `keijiban_rakugaki` (`body`, `position`) VALUES
   ('svg 1', '{"x": 5, "y": 10}'),
   ('svg 2', '{"x": 10, "y": 15}'),
