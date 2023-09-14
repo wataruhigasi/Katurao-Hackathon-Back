@@ -89,41 +89,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
-  /threads/{thread_id}/comments:
-    get:
-      tags:
-        - comment
-      description: >
-        全てのコメントを取得する
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Comment"
-
-  /threads/{thread_id}/comment:
-    post:
-      tags:
-        - comment
-      description: >
-        コメントを作成する
-      parameters:
-        - name: body
-          description: string
-          required: true
-      responses:
-        "204":
-          description: no content
-        "400":
-          description: unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
   /thread/{thread_id}/rakugakis:
     get:
       tags:
@@ -234,23 +199,10 @@ components:
         position:
           type: json
           example: { "x": 0, "y": 0 }
-        comments:
+        thread_rakugakis:
           type: "array"
           items:
-            $ref: "#/components/schemas/Comment"
-
-    Comment:
-      type: "object"
-      properties:
-        id:
-          type: "integer"
-        body:
-          type: "string"
-        created_at:
-          type: "string"
-          format: "date-time"
-        author:
-          type: "string"
+            $ref: "#/components/schemas/Thread_Rakugaki"
 
     Keijiban_Rakugaki:
       type: "object"
