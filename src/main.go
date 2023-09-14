@@ -13,13 +13,9 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 	article_handler "github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/handler"
 	article_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/article/infra"
-	comment_handler "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/handler"
-	comment_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/comment/infra"
 
 	thread_handler "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/handler"
 	thread_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/infra"
-	thread_usecase "github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/usecase"
-	transaction_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/transaction/infra"
 
 	keijiban_rakugaki_handler "github.com/wataruhigasi/Katurao-Hackathon-Back/components/keijiban_rakugaki/handler"
 	keijiban_rakugaki_infra "github.com/wataruhigasi/Katurao-Hackathon-Back/components/keijiban_rakugaki/infra"
@@ -37,13 +33,8 @@ func main() {
 	ar := article_infra.NewRepo(conn)
 	ah := article_handler.New(ar)
 
-	cr := comment_infra.NewRepo(conn)
-	ch := comment_handler.New(cr)
-
 	tr := thread_infra.NewRepo(conn)
-	txr := transaction_infra.NewRepo(conn)
-	tu := thread_usecase.New(tr, cr, txr)
-	th := thread_handler.New(tu)
+	th := thread_handler.New(tr)
 
 	krr := keijiban_rakugaki_infra.NewRepo(conn)
 	krh := keijiban_rakugaki_handler.New(krr)
@@ -58,9 +49,6 @@ func main() {
 	e.GET("/articles", ah.GetAll)
 	e.POST("/article", ah.Create)
 	e.PATCH("/article/:article_id/position", ah.ChangePosition)
-
-	e.GET("/thread/:thread_id/comments", ch.GetAll)
-	e.POST("/thread/:thread_id/comment", ch.Create)
 
 	e.GET("/threads", th.GetAll)
 	e.POST("/thread", th.Create)
