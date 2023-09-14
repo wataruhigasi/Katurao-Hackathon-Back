@@ -1,10 +1,10 @@
 -- articles テーブルにデータを挿入
-INSERT INTO `articles` (`title`, `body`, `position`) VALUES
-  ('Article 1', 'This is the body of Article 1.', '{"x": 10, "y": 20}'),
-  ('Article 2', 'This is the body of Article 2.', '{"x": 15, "y": 25}'),
-  ('Article 3', 'This is the body of Article 3.', '{"x": 20, "y": 30}'),
-  ('Article 4', 'This is the body of Article 4.', '{"x": 25, "y": 35}'),
-  ('Article 5', 'This is the body of Article 5.', '{"x": 30, "y": 40}');
+INSERT INTO `articles` (`body`, `position`) VALUES
+  ('This is the body of Article 1.', '{"x": 10, "y": 20}'),
+  ('This is the body of Article 2.', '{"x": 15, "y": 25}'),
+  ('This is the body of Article 3.', '{"x": 20, "y": 30}'),
+  ('This is the body of Article 4.', '{"x": 25, "y": 35}'),
+  ('This is the body of Article 5.', '{"x": 30, "y": 40}');
 
 -- threads テーブルにデータを挿入
 INSERT INTO `threads` (`title`, `position`) VALUES

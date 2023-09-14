@@ -8,8 +8,6 @@ import "testing"
 func TestUpsert(t *testing.T) {
 	t.Run("Articles", testArticlesUpsert)
 
-	t.Run("Comments", testCommentsUpsert)
-
 	t.Run("KeijibanRakugakis", testKeijibanRakugakisUpsert)
 
 	t.Run("ThreadRakugakis", testThreadRakugakisUpsert)

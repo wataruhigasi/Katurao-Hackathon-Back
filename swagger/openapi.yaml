@@ -27,9 +27,6 @@ paths:
       description: >
         記事を作成する
       parameters:
-        - name: title
-          description: string
-          required: true
         - name: body
           description: string
           required: true
@@ -175,8 +172,6 @@ components:
         id:
           type: "integer"
           # format: "int64"
-        name:
-          type: "string"
         created_at:
           type: "string"
           format: "date-time"
