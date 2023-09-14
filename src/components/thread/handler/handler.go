@@ -5,8 +5,8 @@ import (
 	"strconv"
 
 	"github.com/labstack/echo/v4"
-	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/usecase"
 
+	"github.com/wataruhigasi/Katurao-Hackathon-Back/components/thread/infra"
 	"github.com/wataruhigasi/Katurao-Hackathon-Back/domain/model"
 )
 
@@ -17,17 +17,17 @@ type Handler interface {
 }
 
 type handlerImpl struct {
-	u usecase.Usecase
+	r infra.Repo
 }
 
-func New(u usecase.Usecase) *handlerImpl {
+func New(r infra.Repo) *handlerImpl {
 	return &handlerImpl{
-		u: u,
+		r: r,
 	}
 }
 
 func (h *handlerImpl) GetAll(c echo.Context) error {
-	threads, err := h.u.FindAll()
+	threads, err := h.r.FindAll()
 	if err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
@@ -35,31 +35,14 @@ func (h *handlerImpl) GetAll(c echo.Context) error {
 	return c.JSON(http.StatusOK, threads)
 }
 
-type createReq struct {
-	Title    string         `json:"title"`
-	Body     string         `json:"body"`
-	Author   string         `json:"author"`
-	Position model.Position `json:"position"`
-}
-
 func (h *handlerImpl) Create(c echo.Context) error {
-	req := new(createReq)
-	if err := c.Bind(req); err != nil {
+	t := new(model.Thread)
+	if err := c.Bind(t); err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	t := &model.Thread{
-		Title:    req.Title,
-		Position: req.Position,
-	}
-
-	com := &model.Comment{
-		Body:   req.Body,
-		Author: req.Author,
-	}
-
-	if err := h.u.Create(t, com); err != nil {
+	if err := h.r.Create(t); err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}
@@ -80,7 +63,7 @@ func (h *handlerImpl) ChangePosition(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
-	if err := h.u.ChangePosition(id, req); err != nil {
+	if err := h.r.ChangePosition(id, req); err != nil {
 		c.Logger().Error(err)
 		return echo.NewHTTPError(http.StatusInternalServerError, err)
 	}

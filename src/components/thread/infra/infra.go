@@ -12,8 +12,7 @@ import (
 
 type Repo interface {
 	FindAll() ([]*model.Thread, error)
-	Create(*model.Thread) (sql.Result, error)
-	CreateTx(*sql.Tx, *model.Thread) (sql.Result, error)
+	Create(*model.Thread) error
 	ChangePosition(int64, *model.Position) error
 }
 
@@ -54,18 +53,20 @@ func toThread(t *models.Thread) (*model.Thread, error) {
 	}
 
 	return &model.Thread{
-		ID:        int(t.ID),
-		Title:     t.Title,
-		CreatedAt: t.CreatedAt,
-		Position:  p,
-		Comments:  nil,
+		ID:              int(t.ID),
+		Title:           t.Title,
+		CreatedAt:       t.CreatedAt,
+		Position:        p,
+		ThreadRakugakis: make([]*model.ThreadRakugaki, 0),
 	}, nil
 }
 
-func (r *repoImpl) Create(t *model.Thread) (sql.Result, error) {
+func (r *repoImpl) Create(t *model.Thread) error {
+	ctx := context.Background()
+
 	pos := &types.JSON{}
 	if err := pos.Marshal(t.Position); err != nil {
-		return nil, err
+		return err
 	}
 
 	dto := models.Thread{
@@ -73,47 +74,7 @@ func (r *repoImpl) Create(t *model.Thread) (sql.Result, error) {
 		Position: *pos,
 	}
 
-	// ここで、ORMを使っていないのはsql.Resultを返して、そのメソッドのLastInsertID()を使うため
-	// Exec()によって、sql.Resultが返るがsqlboilerのInsertでは返さない
-
-	p, err := r.conn.Prepare("INSERT INTO threads (title, position) VALUES (?, ?)")
-	if err != nil {
-		return nil, err
-	}
-
-	res, err := p.Exec(dto.Title, *pos)
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
-}
-
-func (r *repoImpl) CreateTx(tx *sql.Tx, t *model.Thread) (sql.Result, error) {
-	pos := &types.JSON{}
-	if err := pos.Marshal(t.Position); err != nil {
-		return nil, err
-	}
-
-	dto := models.Thread{
-		Title:    t.Title,
-		Position: *pos,
-	}
-
-	// ここで、ORMを使っていないのはsql.Resultを返して、そのメソッドのLastInsertID()を使うため
-	// Exec()によって、sql.Resultが返るがsqlboilerのInsertでは返さない
-
-	p, err := tx.Prepare("INSERT INTO threads (title, position) VALUES (?, ?)")
-	if err != nil {
-		return nil, err
-	}
-
-	res, err := p.Exec(dto.Title, *pos)
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
+	return dto.Insert(ctx, r.conn, boil.Infer())
 }
 
 func (r *repoImpl) ChangePosition(id int64, p *model.Position) error {
