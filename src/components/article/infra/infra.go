@@ -54,7 +54,6 @@ func toArticle(a *models.Article) (*model.Article, error) {
 
 	return &model.Article{
 		ID:        int(a.ID),
-		Title:     a.Title,
 		CreatedAt: a.CreatedAt,
 		Body:      a.Body,
 		Position:  p,
@@ -72,7 +71,6 @@ func (r *repoImpl) Create(a *model.Article) error {
 	// INSERT INTO articles (title, created_at, body, position) VALUES (?, ?, ?, ?)
 	dto := models.Article{
 		ID:       int64(a.ID),
-		Title:    a.Title,
 		Body:     a.Body,
 		Position: *json,
 	}
@@ -83,7 +81,7 @@ func (r *repoImpl) Create(a *model.Article) error {
 func (r *repoImpl) ChangePosition(id int64, p *model.Position) error {
 	ctx := context.Background()
 
-	a, err :=models.FindArticle(ctx, r.conn, id)
+	a, err := models.FindArticle(ctx, r.conn, id)
 	if err != nil {
 		return err
 	}

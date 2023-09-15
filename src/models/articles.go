@@ -25,7 +25,6 @@ import (
 // Article is an object representing the database table.
 type Article struct {
 	ID        int64      `boil:"id" json:"id" toml:"id" yaml:"id"`
-	Title     string     `boil:"title" json:"title" toml:"title" yaml:"title"`
 	Body      string     `boil:"body" json:"body" toml:"body" yaml:"body"`
 	Position  types.JSON `boil:"position" json:"position" toml:"position" yaml:"position"`
 	CreatedAt time.Time  `boil:"created_at" json:"created_at" toml:"created_at" yaml:"created_at"`
@@ -36,13 +35,11 @@ type Article struct {
 
 var ArticleColumns = struct {
 	ID        string
-	Title     string
 	Body      string
 	Position  string
 	CreatedAt string
 }{
 	ID:        "id",
-	Title:     "title",
 	Body:      "body",
 	Position:  "position",
 	CreatedAt: "created_at",
@@ -50,13 +47,11 @@ var ArticleColumns = struct {
 
 var ArticleTableColumns = struct {
 	ID        string
-	Title     string
 	Body      string
 	Position  string
 	CreatedAt string
 }{
 	ID:        "articles.id",
-	Title:     "articles.title",
 	Body:      "articles.body",
 	Position:  "articles.position",
 	CreatedAt: "articles.created_at",
@@ -156,13 +151,11 @@ func (w whereHelpertime_Time) GTE(x time.Time) qm.QueryMod {
 
 var ArticleWhere = struct {
 	ID        whereHelperint64
-	Title     whereHelperstring
 	Body      whereHelperstring
 	Position  whereHelpertypes_JSON
 	CreatedAt whereHelpertime_Time
 }{
 	ID:        whereHelperint64{field: "`articles`.`id`"},
-	Title:     whereHelperstring{field: "`articles`.`title`"},
 	Body:      whereHelperstring{field: "`articles`.`body`"},
 	Position:  whereHelpertypes_JSON{field: "`articles`.`position`"},
 	CreatedAt: whereHelpertime_Time{field: "`articles`.`created_at`"},
@@ -185,8 +178,8 @@ func (*articleR) NewStruct() *articleR {
 type articleL struct{}
 
 var (
-	articleAllColumns            = []string{"id", "title", "body", "position", "created_at"}
-	articleColumnsWithoutDefault = []string{"title", "body", "position"}
+	articleAllColumns            = []string{"id", "body", "position", "created_at"}
+	articleColumnsWithoutDefault = []string{"body", "position"}
 	articleColumnsWithDefault    = []string{"id", "created_at"}
 	articlePrimaryKeyColumns     = []string{"id"}
 	articleGeneratedColumns      = []string{}
