@@ -1,6 +1,6 @@
 CREATE TABLE `articles` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `body` TEXT NOT NULL,
+  `body` LONGTEXT NOT NULL,
   `position` json NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -8,7 +8,7 @@ CREATE TABLE `articles` (
 
 CREATE TABLE `threads` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `title` TEXT NOT NULL,
+  `title` LONGTEXT NOT NULL,
   `position` json NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
@@ -16,7 +16,7 @@ CREATE TABLE `threads` (
 
 CREATE TABLE `keijiban_rakugaki` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
-  `body` TEXT NOT NULL,
+  `body` LONGTEXT NOT NULL,
   `position` json NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
@@ -26,7 +26,7 @@ CREATE TABLE `keijiban_rakugaki` (
 CREATE TABLE `thread_rakugaki` (
   `id` BIGINT NOT NULL AUTO_INCREMENT,
   `thread_id` BIGINT NOT NULL,
-  `body` TEXT NOT NULL,
+  `body` LONGTEXT NOT NULL,
   `position` json NOT NULL,
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
